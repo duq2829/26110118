@@ -1,1 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的網頁程式作品集 | Portfolio</title>
+    <style>
+        /* CSS Reset & 基礎設定 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang TC', 'Microsoft JhengHei', system-ui, -apple-system, sans-serif;
+        }
 
+        body {
+            background-color: #0f1117;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* 主容器 */
+        .container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        /* 1. 個人頭像與資訊區 */
+        .profile-section {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #2a2e3d;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s ease;
+        }
+
+        .avatar-wrapper:hover .avatar {
+            transform: scale(1.08) rotate(3deg);
+            border-color: #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #ffffff 0%, #a0a5b5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .profile-subtitle {
+            font-size: 0.95rem;
+            color: #6c7289;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* 2. 關卡按鈕網格區域 */
+        .grid-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 電腦版 4 欄 */
+            gap: 16px;
+        }
+
+        /* 按鈕基本樣式 */
+        .level-btn {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 90px;
+            padding: 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* 已解鎖按鈕樣式 (Week 1, Week 2) */
+        .level-btn.unlocked {
+            background: #1a1d28;
+            border: 1px solid #2e3447;
+            color: #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-btn.unlocked .week-tag {
+            font-size: 0.75rem;
+            color: #00ff88;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .level-btn.unlocked .title {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* 酷炫 Hover 動畫效果 (已解鎖) */
+        .level-btn.unlocked::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .level-btn.unlocked:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: #00ff88;
+            background: #222736;
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.25);
+            color: #ffffff;
+        }
+
+        .level-btn.unlocked:hover::before {
+            left: 100%;
+        }
+
+        /* 4. 未解鎖按鈕樣式 (Week 3 - Week 16) */
+        .level-btn.locked {
+            background: #12141c;
+            border: 1px solid #1c202e;
+            color: #4a5064;
+            cursor: not-allowed;
+            user-select: none;
+        }
+
+        .level-btn.locked .lock-icon {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+            filter: grayscale(100%);
+            opacity: 0.5;
+            transition: transform 0.3s ease;
+        }
+
+        .level-btn.locked .week-tag {
+            font-size: 0.8rem;
+            color: #4a5064;
+            font-weight: 500;
+        }
+
+        /* 未解鎖的抖動與微微放大 Hover 效果 */
+        .level-btn.locked:hover {
+            border-color: #2a2e3d;
+            background: #161822;
+        }
+
+        .level-btn.locked:hover .lock-icon {
+            transform: scale(1.2) rotate(-10deg);
+            opacity: 0.8;
+        }
+
+        /* RWD 響應式手機版調整 */
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr); /* 平板/手機 2 欄 */
+                gap: 12px;
+            }
+
+            .level-btn {
+                height: 80px;
+            }
+            
+            .profile-name {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .grid-container {
+                grid-template-columns: 1fr; /* 超小螢幕 1 欄 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. 個人大頭貼與名字 -->
+        <div class="profile-section">
+            <div class="avatar-wrapper">
+                <!-- 可替換成自己的大頭貼圖片路徑，如: avatar.jpg -->
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="大頭貼" class="avatar">
+            </div>
+            <h1 class="profile-name">YOUR NAME</h1>
+            <p class="profile-subtitle">Web Development Quest</p>
+        </div>
+
+        <!-- 2. 16個任務關卡按鈕網格 -->
+        <div class="grid-container">
+            <!-- 已解鎖關卡 1 -->
+            <a href="w1/index.html" class="level-btn unlocked">
+                <span class="week-tag">WEEK 01</span>
+                <span class="title">數位名片</span>
+            </a>
+
+            <!-- 已解鎖關卡 2 -->
+            <a href="w2/index.html" class="level-btn unlocked">
+                <span class="week-tag">WEEK 02</span>
+                <span class="title">今天吃甚麼？</span>
+            </a>
+
+            <!-- 未解鎖關卡 (3 ~ 16) -->
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 03</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 04</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 05</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 06</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 07</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 08</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 09</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 10</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 11</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 12</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 13</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 14</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 15</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 16</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
