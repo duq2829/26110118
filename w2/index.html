@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今天吃什麼？ - 隨機美食抽籤機</title>
+  <!-- 引入 Font Awesome 圖示庫 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* 全局樣式重設與黑魂質感背景 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #0d0d11; /* 極深質感黑背景 */
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* 高級感黑魂主卡片 */
+    .food-card {
+      background: #16161a;
+      width: 100%;
+      max-width: 420px;
+      padding: 40px 28px;
+      border-radius: 24px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7),
+                  0 0 0 1px rgba(255, 255, 255, 0.03);
+      transition: transform 0.3s ease;
+    }
+
+    .food-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* 圖片容器與樣式 */
+    .image-container {
+      width: 100%;
+      height: 200px;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      display: none; /* 預設隱藏，抽籤後顯示 */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .image-container.show {
+      display: block;
+    }
+
+    .food-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 標題與內文 */
+    .title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+      color: #ffffff;
+      min-height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #8f8f9d;
+      margin-bottom: 32px;
+      font-weight: 300;
+    }
+
+    /* 生動彈跳動畫效果 */
+    .bounce-anim {
+      animation: bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes bounce {
+      0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(20px);
+      }
+      50% {
+        transform: scale(1.1) translateY(-10px);
+      }
+      70% {
+        transform: scale(0.95) translateY(5px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* 按鈕基本樣式 */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    /* 點我抽籤大按鈕（金色奢華質感） */
+    .btn-primary {
+      background: linear-gradient(135deg, #e6c875, #b89235);
+      color: #0f0f12;
+      box-shadow: 0 6px 20px rgba(184, 146, 53, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #f5d787, #c9a142);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(184, 146, 53, 0.45);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* 馬上出發按鈕（高對比亮灰/白） */
+    .btn-map {
+      background-color: #26262c;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      margin-top: 14px;
+    }
+
+    .btn-map:hover {
+      background-color: #32323a;
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* 隱藏元素樣式 */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 主卡片容器 -->
+  <div class="food-card">
+    
+    <!-- 美食圖片顯示區（預設隱藏） -->
+    <div class="image-container" id="imageContainer">
+      <img src="" alt="美食圖片" id="foodImage" class="food-image">
+    </div>
+
+    <!-- 標題與結果顯示區 -->
+    <h1 class="title" id="titleText">今天吃什麼？</h1>
+    <p class="subtitle" id="subtitleText">點擊下方按鈕，交給命運來決定！</p>
+
+    <!-- 抽籤大按鈕 -->
+    <button id="drawBtn" class="btn btn-primary">
+      <i class="fas fa-dice"></i> 點我抽籤
+    </button>
+
+    <!-- 馬上出發按鈕（抽籤後顯示） -->
+    <a href="#" id="mapBtn" target="_blank" class="btn btn-map hidden">
+      <i class="fas fa-location-dot"></i> 馬上出發 (Google Maps)
+    </a>
+
+  </div>
+
+  <script>
+    // 確保 HTML DOM 載入完畢後再執行，避免產生 null 錯誤
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // 1. 食物選單資料庫（包含名稱、自訂圖片連結、Google Map 搜尋連結）
+      const foodList = [
+        {
+          name: '火鍋 🍲',
+          image: 'https://i.postimg.cc/BbD7Skx9/871213146-1436820138623424-1552853347167781382-n.jpg',
+          mapUrl: 'https://www.google.com/maps/search/火鍋'
+        },
+        {
+          name: '披薩 🍕',
+          image: 'https://i.postimg.cc/L4rGcBzK/868587076-2199586920985176-2280446430326055212-n.jpg',
+          mapUrl: 'https://www.google.com/maps/search/披薩'
+        },
+        {
+          name: '泡麵 🍜',
+          image: 'https://i.postimg.cc/zBvkB6Yh/871074820-1111852258410797-5623932308458165629-n.jpg',
+          mapUrl: 'https://www.google.com/maps/search/便利商店'
+        },
+        {
+          name: '焗烤 🧀',
+          image: 'https://i.postimg.cc/fRMqsHy5/885147896-1784929582597034-4843217995960993388-n.jpg',
+          mapUrl: 'https://www.google.com/maps/search/焗烤'
+        },
+        {
+          name: '湯包 🥟',
+          image: 'https://i.postimg.cc/XJrDhpq7/882986339-2321164988424021-4942324427741783064-n.jpg',
+          mapUrl: 'https://www.google.com/maps/search/湯包'
+        }
+      ];
+
+      // 2. 取得頁面元素
+      const drawBtn = document.getElementById('drawBtn');
+      const titleText = document.getElementById('titleText');
+      const subtitleText = document.getElementById('subtitleText');
+      const imageContainer = document.getElementById('imageContainer');
+      const foodImage = document.getElementById('foodImage');
+      const mapBtn = document.getElementById('mapBtn');
+
+      // 3. 綁定按鈕點擊事件
+      drawBtn.addEventListener('click', () => {
+        // 隨機選取一個食物索引
+        const randomIndex = Math.floor(Math.random() * foodList.length);
+        const selectedFood = foodList[randomIndex];
+
+        // 更新圖片
+        foodImage.src = selectedFood.image;
+        foodImage.alt = selectedFood.name;
+        imageContainer.classList.add('show');
+
+        // 更新標題文字與次要說明
+        titleText.innerText = selectedFood.name;
+        subtitleText.innerText = '太棒了！今天就決定吃這個吧！';
+
+        // 觸發彈跳動畫（先移除 class 再重新新增）
+        titleText.classList.remove('bounce-anim');
+        imageContainer.classList.remove('bounce-anim');
+        void titleText.offsetWidth; // 強制重繪 (reflow) 以利再次播放動畫
+        titleText.classList.add('bounce-anim');
+        imageContainer.classList.add('bounce-anim');
+
+        // 更新並顯示「馬上出發」Google Maps 按鈕
+        mapBtn.href = selectedFood.mapUrl;
+        mapBtn.classList.remove('hidden');
+
+        // 更改抽籤按鈕文字
+        drawBtn.innerHTML = '<i class="fas fa-rotate-right"></i> 不滿意？再抽一次';
+      });
+
+    });
+  </script>
+</body>
+</html>
