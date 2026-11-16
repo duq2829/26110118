@@ -1,524 +1,299 @@
 <!DOCTYPE html>
-<html lang="zh-TW" class="dark h-full bg-slate-950">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>雲端心電感應 | 多人默契遊戲</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome 圖示 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0ea5e9',
-              600: '#0284c7',
-              700: '#0369a1',
-              900: '#0c4a6e',
-              950: '#082f49'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的網頁程式作品集 | Portfolio</title>
+    <style>
+        /* CSS Reset & 基礎設定 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang TC', 'Microsoft JhengHei', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #0f1117;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* 主容器 */
+        .container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        /* 1. 個人頭像與資訊區 */
+        .profile-section {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #2a2e3d;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s ease;
+        }
+
+        .avatar-wrapper:hover .avatar {
+            transform: scale(1.08) rotate(3deg);
+            border-color: #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #ffffff 0%, #a0a5b5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .profile-subtitle {
+            font-size: 0.95rem;
+            color: #6c7289;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* 2. 關卡按鈕網格區域 */
+        .grid-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 電腦版 4 欄 */
+            gap: 16px;
+        }
+
+        /* 按鈕基本樣式 */
+        .level-btn {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 90px;
+            padding: 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* 已解鎖按鈕樣式 */
+        .level-btn.unlocked {
+            background: #1a1d28;
+            border: 1px solid #2e3447;
+            color: #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-btn.unlocked .week-tag {
+            font-size: 0.75rem;
+            color: #00ff88;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .level-btn.unlocked .title {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* 酷炫 Hover 動畫效果 (已解鎖) */
+        .level-btn.unlocked::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .level-btn.unlocked:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: #00ff88;
+            background: #222736;
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.25);
+            color: #ffffff;
+        }
+
+        .level-btn.unlocked:hover::before {
+            left: 100%;
+        }
+
+        /* 未解鎖按鈕樣式 */
+        .level-btn.locked {
+            background: #12141c;
+            border: 1px solid #1c202e;
+            color: #4a5064;
+            cursor: not-allowed;
+            user-select: none;
+        }
+
+        .level-btn.locked .lock-icon {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+            filter: grayscale(100%);
+            opacity: 0.5;
+            transition: transform 0.3s ease;
+        }
+
+        .level-btn.locked .week-tag {
+            font-size: 0.8rem;
+            color: #4a5064;
+            font-weight: 500;
+        }
+
+        .level-btn.locked:hover {
+            border-color: #2a2e3d;
+            background: #161822;
+        }
+
+        .level-btn.locked:hover .lock-icon {
+            transform: scale(1.2) rotate(-10deg);
+            opacity: 0.8;
+        }
+
+        /* RWD 響應式手機版調整 */
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr); /* 平板/手機 2 欄 */
+                gap: 12px;
             }
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    /* 3D 翻牌動畫透視設定 */
-    .perspective-1000 {
-      perspective: 1000px;
-    }
-    .transform-style-3d {
-      transform-style: preserve-3d;
-    }
-    .backface-hidden {
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-    .rotate-y-180 {
-      transform: rotateY(180deg);
-    }
-    .card-inner {
-      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .card-inner.is-flipped {
-      transform: rotateY(180deg);
-    }
 
-    /* 高級藍調質感微光特效 */
-    .glow-blue {
-      box-shadow: 0 0 30px -5px rgba(14, 165, 233, 0.25);
-    }
-    .glass-card {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(56, 189, 248, 0.12);
-    }
-  </style>
+            .level-btn {
+                height: 80px;
+            }
+            
+            .profile-name {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .grid-container {
+                grid-template-columns: 1fr; /* 超小螢幕 1 欄 */
+            }
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-full font-sans flex flex-col justify-between selection:bg-sky-500 selection:text-white">
+<body>
 
-  <!-- 頂部導覽列 (Navigation Bar) -->
-  <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur sticky top-0 z-40">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-sky-500/30">
-          <i class="fa-solid fa-brain text-xl"></i>
+    <div class="container">
+        <!-- 1. 個人大頭貼與名字 -->
+        <div class="profile-section">
+            <div class="avatar-wrapper">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="大頭貼" class="avatar">
+            </div>
+            <h1 class="profile-name">YOUR NAME</h1>
+            <p class="profile-subtitle">Web Development Quest</p>
         </div>
-        <div>
-          <h1 class="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">雲端心電感應</h1>
-          <p class="text-xs text-slate-400">Telepathy Party Game</p>
+
+        <!-- 2. 16個任務關卡按鈕網格 -->
+        <div class="grid-container">
+            <!-- 已解鎖關卡 1 -->
+            <a href="w1/index.html" class="level-btn unlocked">
+                <span class="week-tag">WEEK 01</span>
+                <span class="title">數位名片</span>
+            </a>
+
+            <!-- 已解鎖關卡 2 -->
+            <a href="w2/index.html" class="level-btn unlocked">
+                <span class="week-tag">WEEK 02</span>
+                <span class="title">今天吃甚麼？</span>
+            </a>
+
+            <!-- 未解鎖關卡 (3 ~ 4) -->
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 03</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 04</span>
+            </div>
+
+            <!-- 已解鎖關卡 5 (雲端心電感應) -->
+            <a href="w5/index.html" class="level-btn unlocked">
+                <span class="week-tag">WEEK 05</span>
+                <span class="title">雲端心電感應</span>
+            </a>
+
+            <!-- 未解鎖關卡 (6 ~ 16) -->
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 06</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 07</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 08</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 09</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 10</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 11</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 12</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 13</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 14</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 15</span>
+            </div>
+            <div class="level-btn locked">
+                <span class="lock-icon">🔒</span>
+                <span class="week-tag">Week 16</span>
+            </div>
         </div>
-      </div>
-      
-      <!-- 頂部右側狀態資訊與隱藏房主開關按鈕 -->
-      <div id="nav-info" class="hidden flex items-center gap-4">
-        <div class="text-right">
-          <span class="text-[10px] text-slate-500 block font-mono">ROOM ID</span>
-          <span id="nav-room-id" class="text-sm font-mono font-bold text-sky-400"></span>
-        </div>
-        <div class="text-right border-l border-slate-800 pl-4">
-          <span class="text-[10px] text-slate-500 block font-mono">PLAYER / ROLE</span>
-          <span id="nav-player-name" class="text-sm font-semibold text-slate-200"></span>
-        </div>
-        <!-- 隱藏房主切換按鈕 -->
-        <button id="host-toggle-btn" onclick="toggleHostMode()" title="切換隱藏房主控制台" class="ml-2 w-9 h-9 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 flex items-center justify-center text-slate-500 hover:text-sky-400 transition">
-          <i id="host-icon" class="fa-solid fa-user-lock"></i>
-        </button>
-      </div>
     </div>
-  </header>
 
-  <!-- 主要內容視窗 -->
-  <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
-
-    <!-- 步驟 1: 登入與房間代碼分流介面 -->
-    <section id="login-section" class="max-w-md mx-auto my-12">
-      <div class="glass-card rounded-2xl p-8 glow-blue">
-        <div class="text-center mb-8">
-          <h2 class="text-2xl font-bold mb-2">進入默契遊戲</h2>
-          <p class="text-sm text-slate-400">輸入暱稱與房間號碼，並選擇您的遊戲身分</p>
-        </div>
-
-        <form id="join-form" onsubmit="handleJoinRoom(event)" class="space-y-5">
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">玩家暱稱</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                <i class="fa-solid fa-user"></i>
-              </span>
-              <input type="text" id="input-player-name" required placeholder="請輸入您的名字..." 
-                class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-800 rounded-xl focus:outline-none focus:border-sky-500 text-white placeholder-slate-600 transition">
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">房間代碼 (Room ID)</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                <i class="fa-solid fa-door-open"></i>
-              </span>
-              <input type="text" id="input-room-id" required placeholder="例如：888 或 group-A" 
-                class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-800 rounded-xl focus:outline-none focus:border-sky-500 text-white placeholder-slate-600 font-mono transition">
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">選擇遊戲身分</label>
-            <div class="grid grid-cols-2 gap-3">
-              <label class="flex items-center justify-center gap-2 p-3 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer hover:border-sky-500 transition">
-                <input type="radio" name="role-selection" value="player" checked class="text-sky-600 focus:ring-sky-500">
-                <span class="text-sm font-medium">一般玩家</span>
-              </label>
-              <label class="flex items-center justify-center gap-2 p-3 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer hover:border-sky-500 transition">
-                <input type="radio" name="role-selection" value="host" class="text-sky-600 focus:ring-sky-500">
-                <span class="text-sm font-medium text-amber-400"><i class="fa-solid fa-crown mr-1"></i> 房主</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="pt-2">
-            <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-sky-600/30 transition transform active:scale-95">
-              進入遊戲大廳
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- 步驟 2: 遊戲主大廳區域 (預設隱藏) -->
-    <section id="game-section" class="hidden space-y-8">
-      
-      <!-- 房主控制台面板 -->
-      <div id="host-panel" class="hidden glass-card border-sky-500/40 rounded-2xl p-6 relative overflow-hidden transition-all duration-300 glow-blue">
-        <div class="absolute top-0 right-0 bg-sky-600/20 text-sky-300 text-[10px] px-3 py-1 rounded-bl-lg font-mono border-b border-l border-sky-500/30">
-          HOST CONTROLLER (房主控制台)
-        </div>
-
-        <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-sky-300">
-          <i class="fa-solid fa-crown text-amber-400"></i> 房主管理區
-        </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- 出題 Input -->
-          <div class="md:col-span-2 flex gap-2">
-            <input type="text" id="host-question-input" placeholder="輸入本輪問題 (例如：說到夏天會想到什麼？)" 
-              class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:border-sky-500 text-sm text-white placeholder-slate-600">
-            <button onclick="setQuestion()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white text-sm font-semibold rounded-xl transition flex items-center gap-2 whitespace-nowrap shadow-md shadow-sky-900/30">
-              <i class="fa-solid fa-paper-plane"></i> 出題並開始
-            </button>
-          </div>
-
-          <!-- 房主動作按鈕群 -->
-          <div class="flex gap-2 justify-end">
-            <button onclick="revealAnswers()" class="flex-1 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-xl transition shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2">
-              <i class="fa-solid fa-eye"></i> 全網頁開牌
-            </button>
-            <button onclick="resetGame()" class="py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 border border-slate-700/50">
-              <i class="fa-solid fa-rotate-right"></i> 重置本局
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 題目與遊戲狀態 Bar -->
-      <div class="glass-card rounded-2xl p-6 text-center relative">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-slate-900/80 text-slate-400 mb-3 border border-slate-800" id="status-badge">
-          <span class="w-2 h-2 rounded-full bg-yellow-500 animate-ping"></span>
-          <span>等待房主出題...</span>
-        </div>
-        <h2 id="display-question" class="text-2xl md:text-3xl font-extrabold tracking-wide text-slate-100 min-h-[40px] flex items-center justify-center">
-          準備中...
-        </h2>
-      </div>
-
-      <!-- 玩家答題區 -->
-      <div id="answer-input-zone" class="glass-card rounded-2xl p-6 max-w-xl mx-auto">
-        <form onsubmit="submitAnswer(event)" class="flex flex-col sm:flex-row gap-3">
-          <input type="text" id="player-answer-input" required placeholder="輸入你的默契答案..." 
-            class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-sky-500 text-white placeholder-slate-600">
-          <button type="submit" id="submit-btn" class="py-3 px-6 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-semibold rounded-xl transition shadow-md whitespace-nowrap">
-            送出答案
-          </button>
-        </form>
-        <p id="answer-status-msg" class="text-xs text-sky-400 mt-2 text-center min-h-[18px]"></p>
-      </div>
-
-      <!-- 翻牌與答案展示區 (3D 卡牌網格) -->
-      <div>
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-bold text-slate-300 flex items-center gap-2">
-            <i class="fa-solid fa-users text-sky-400"></i> 玩家卡牌區 (<span id="player-count">0</span>)
-          </h3>
-          <span class="text-xs text-slate-500 font-mono"><i class="fa-solid fa-arrows-rotate animate-spin mr-1"></i>每 2 秒自動同步</span>
-        </div>
-
-        <!-- 3D 卡牌 Grid Container -->
-        <div id="cards-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          <!-- 系統將自動動態渲染卡牌 -->
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- 底部 Footer -->
-  <footer class="border-t border-slate-900 bg-slate-950 py-4 text-center text-xs text-slate-600">
-    雲端心電感應 Telepathy Game &copy; 2026 | Tailwind CSS & GAS API
-  </footer>
-
-  <!-- JavaScript 核心邏輯 -->
-  <script>
-    // 設定 GAS API URL 與全域變數
-    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwpWlC-KSmQj6SsbP11XhvcAkHCRepZS5hjQafWrIXCzEoxsG4AAyY1ZI-C1TvgGi_y/exec";
-
-    let currentRoom = "";
-    let currentName = "";
-    let isHost = false;
-    let pollingTimer = null;
-
-    // 1. 登入與進入房間分流
-    function handleJoinRoom(e) {
-      e.preventDefault();
-      const nameInput = document.getElementById("input-player-name").value.trim();
-      const roomInput = document.getElementById("input-room-id").value.trim();
-      
-      // 使用更安全的查詢方式避免語法錯誤
-      const checkedRole = document.querySelector('input[name="role-selection"]:checked');
-      const roleInput = checkedRole ? checkedRole.value : "player";
-
-      if (!nameInput || !roomInput) return;
-
-      currentName = nameInput;
-      currentRoom = roomInput;
-      isHost = (roleInput === "host");
-
-      // 更新 Navbar 資訊
-      document.getElementById("nav-room-id").innerText = currentRoom;
-      document.getElementById("nav-player-name").innerText = `${currentName} ${isHost ? '(房主)' : '(玩家)'}`;
-      document.getElementById("nav-info").classList.remove("hidden");
-      document.getElementById("login-section").classList.add("hidden");
-      document.getElementById("game-section").classList.remove("hidden");
-
-      // 若選擇房主則顯示控台並高亮右上角開關
-      if (isHost) {
-        document.getElementById("host-panel").classList.remove("hidden");
-        document.getElementById("host-icon").className = "fa-solid fa-lock-open text-sky-400";
-        document.getElementById("host-toggle-btn").className = "ml-2 w-9 h-9 rounded-lg bg-sky-950/50 border border-sky-500/40 flex items-center justify-center text-sky-400 transition shadow-sm";
-      }
-
-      // 開始 API 輪詢 (Polling)
-      fetchGameState();
-      startPolling();
-    }
-
-    // 2. 切換隱藏房主控制台
-    function toggleHostMode() {
-      isHost = !isHost;
-      const hostPanel = document.getElementById("host-panel");
-      const hostIcon = document.getElementById("host-icon");
-      const hostToggleBtn = document.getElementById("host-toggle-btn");
-
-      if (isHost) {
-        hostPanel.classList.remove("hidden");
-        hostIcon.className = "fa-solid fa-lock-open text-sky-400";
-        hostToggleBtn.className = "ml-2 w-9 h-9 rounded-lg bg-sky-950/50 border border-sky-500/40 flex items-center justify-center text-sky-400 transition shadow-sm";
-      } else {
-        hostPanel.classList.add("hidden");
-        hostIcon.className = "fa-solid fa-user-lock";
-        hostToggleBtn.className = "ml-2 w-9 h-9 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 flex items-center justify-center text-slate-500 hover:text-sky-400 transition";
-      }
-    }
-
-    // 3. 輪詢機制 (Interval: 2000ms)
-    function startPolling() {
-      if (pollingTimer) clearInterval(pollingTimer);
-      pollingTimer = setInterval(() => {
-        fetchGameState();
-      }, 2000);
-    }
-
-    // 4. API GET: 取得房間即時狀態
-    async function fetchGameState() {
-      if (!currentRoom) return;
-
-      try {
-        const response = await fetch(`${GAS_API_URL}?room=${encodeURIComponent(currentRoom)}`);
-        const data = await response.json();
-
-        updateGameUI(data);
-      } catch (error) {
-        console.error("輪詢擷取狀態失敗:", error);
-      }
-    }
-
-    // 5. 更新 UI 與畫面呈現
-    function updateGameUI(data) {
-      const statusBadge = document.getElementById("status-badge");
-      const displayQuestion = document.getElementById("display-question");
-      const answerStatusMsg = document.getElementById("answer-status-msg");
-
-      const status = data.status || "setup";
-      const question = data.question || "";
-      const answers = data.answers || {};
-
-      // 狀態提示與題目更新
-      if (status === "setup") {
-        statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span><span>準備中 (等待房主出題)</span>`;
-        displayQuestion.innerText = "等待房主出題中...";
-      } else if (status === "playing") {
-        statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span><span>進行中 (玩家作答中)</span>`;
-        displayQuestion.innerText = question || "請填答！";
-      } else if (status === "revealed") {
-        statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>已開牌</span>`;
-        displayQuestion.innerText = question ? `${question}` : "開牌結果";
-      }
-
-      // 自己是否已回答的提示
-      if (answers[currentName]) {
-        answerStatusMsg.innerText = `✓ 您已提交答案：「${answers[currentName]}」`;
-      } else {
-        answerStatusMsg.innerText = "";
-      }
-
-      // 渲染 3D 卡牌
-      renderCards(answers, status === "revealed");
-    }
-
-    // 6. 動態渲染卡牌與 3D 翻轉效果
-    function renderCards(answers, isRevealed) {
-      const container = document.getElementById("cards-container");
-      const playerNames = Object.keys(answers);
-      document.getElementById("player-count").innerText = playerNames.length;
-
-      if (playerNames.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full text-center py-12 text-slate-600">
-            <i class="fa-solid fa-inbox text-3xl mb-2 block"></i>
-            尚無玩家提交答案...
-          </div>`;
-        return;
-      }
-
-      playerNames.forEach(name => {
-        const answerText = answers[name];
-        let cardEl = document.getElementById(`card-${name}`);
-
-        // 若該玩家卡牌元素不存在則動態創建
-        if (!cardEl) {
-          const cardWrapper = document.createElement("div");
-          cardWrapper.id = `card-${name}`;
-          cardWrapper.className = "perspective-1000 h-44 w-full";
-          
-          cardWrapper.innerHTML = `
-            <div class="card-inner relative w-full h-full transform-style-3d rounded-2xl cursor-pointer">
-              <!-- 卡牌正面 (未開牌：遮罩蓋住) -->
-              <div class="absolute inset-0 w-full h-full rounded-2xl glass-card border border-slate-800 p-4 flex flex-col justify-between items-center text-center backface-hidden shadow-lg">
-                <div class="w-full flex justify-between items-center text-xs text-slate-500">
-                  <span class="font-bold text-sky-400 truncate max-w-[100px]">${name}</span>
-                  <i class="fa-solid fa-lock"></i>
-                </div>
-                <div class="my-auto">
-                  <div class="w-12 h-12 mx-auto rounded-full bg-sky-950/40 border border-sky-500/30 flex items-center justify-center text-sky-400">
-                    <i class="fa-solid fa-question text-xl"></i>
-                  </div>
-                  <p class="text-xs text-slate-500 mt-2">已完成提交</p>
-                </div>
-                <div class="text-[10px] text-slate-600 uppercase font-mono tracking-widest">TELEPATHY</div>
-              </div>
-
-              <!-- 卡牌背面 (開牌後：顯示答案) -->
-              <div class="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br from-sky-900/90 to-blue-950/90 border-2 border-sky-500/50 p-4 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180 shadow-2xl glow-blue">
-                <div class="w-full flex justify-between items-center text-xs text-sky-300">
-                  <span class="font-bold truncate max-w-[100px]">${name}</span>
-                  <i class="fa-solid fa-sparkles text-amber-300"></i>
-                </div>
-                <div class="my-auto">
-                  <p class="text-xl font-black text-white break-all px-2 text-shadow-sm card-answer-text">
-                    ${answerText}
-                  </p>
-                </div>
-                <div class="text-[10px] text-sky-300/60 uppercase font-mono tracking-widest">REVEALED</div>
-              </div>
-            </div>
-          `;
-
-          container.appendChild(cardWrapper);
-          cardEl = cardWrapper;
-        } else {
-          // 更新答案文字
-          const ansTextEl = cardEl.querySelector(".card-answer-text");
-          if (ansTextEl && ansTextEl.innerText !== answerText) {
-            ansTextEl.innerText = answerText;
-          }
-        }
-
-        // 觸發 3D 翻牌動畫類別 (is-flipped)
-        const cardInner = cardEl.querySelector(".card-inner");
-        if (isRevealed) {
-          cardInner.classList.add("is-flipped");
-        } else {
-          cardInner.classList.remove("is-flipped");
-        }
-      });
-
-      // 清除離開房間或被重置的玩家舊卡牌
-      const currentCards = container.querySelectorAll('[id^="card-"]');
-      currentCards.forEach(card => {
-        const idName = card.id.replace("card-", "");
-        if (!playerNames.includes(idName)) {
-          card.remove();
-        }
-      });
-    }
-
-    // 7. API POST: 玩家送出答案
-    async function submitAnswer(e) {
-      e.preventDefault();
-      const input = document.getElementById("player-answer-input");
-      const answer = input.value.trim();
-      if (!answer) return;
-
-      try {
-        await fetch(GAS_API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            room: currentRoom,
-            action: "submit_answer",
-            playerName: currentName,
-            answer: answer
-          })
-        });
-        input.value = "";
-        fetchGameState();
-      } catch (error) {
-        console.error("提交答案失敗:", error);
-      }
-    }
-
-    // 8. API POST (房主): 設定題目
-    async function setQuestion() {
-      const qInput = document.getElementById("host-question-input");
-      const question = qInput.value.trim();
-      if (!question) return;
-
-      try {
-        await fetch(GAS_API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            room: currentRoom,
-            action: "set_question",
-            question: question
-          })
-        });
-        qInput.value = "";
-        fetchGameState();
-      } catch (error) {
-        console.error("出題失敗:", error);
-      }
-    }
-
-    // 9. API POST (房主): 全網頁同步開牌
-    async function revealAnswers() {
-      try {
-        await fetch(GAS_API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            room: currentRoom,
-            action: "reveal"
-          })
-        });
-        fetchGameState();
-      } catch (error) {
-        console.error("開牌失敗:", error);
-      }
-    }
-
-    // 10. API POST (房主): 重置遊戲
-    async function resetGame() {
-      try {
-        await fetch(GAS_API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            room: currentRoom,
-            action: "reset"
-          })
-        });
-        fetchGameState();
-      } catch (error) {
-        console.error("重置失敗:", error);
-      }
-    }
-  </script>
 </body>
 </html>
