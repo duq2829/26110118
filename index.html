@@ -104,7 +104,7 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* 已解鎖按鈕樣式 (Week 1, Week 2) */
+        /* 已解鎖按鈕樣式 */
         .level-btn.unlocked {
             background: #1a1d28;
             border: 1px solid #2e3447;
@@ -149,7 +149,7 @@
             left: 100%;
         }
 
-        /* 4. 未解鎖按鈕樣式 (Week 3 - Week 16) */
+        /* 未解鎖按鈕樣式 */
         .level-btn.locked {
             background: #12141c;
             border: 1px solid #1c202e;
@@ -172,7 +172,6 @@
             font-weight: 500;
         }
 
-        /* 未解鎖的抖動與微微放大 Hover 效果 */
         .level-btn.locked:hover {
             border-color: #2a2e3d;
             background: #161822;
@@ -212,7 +211,6 @@
         <!-- 1. 個人大頭貼與名字 -->
         <div class="profile-section">
             <div class="avatar-wrapper">
-                <!-- 可替換成自己的大頭貼圖片路徑，如: avatar.jpg -->
                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="大頭貼" class="avatar">
             </div>
             <h1 class="profile-name">YOUR NAME</h1>
@@ -233,7 +231,7 @@
                 <span class="title">今天吃甚麼？</span>
             </a>
 
-            <!-- 未解鎖關卡 (3 ~ 16) -->
+            <!-- 未解鎖關卡 (3 ~ 4) -->
             <div class="level-btn locked">
                 <span class="lock-icon">🔒</span>
                 <span class="week-tag">Week 03</span>
@@ -242,10 +240,14 @@
                 <span class="lock-icon">🔒</span>
                 <span class="week-tag">Week 04</span>
             </div>
-            <div class="level-btn locked">
-                <span class="lock-icon">🔒</span>
-                <span class="week-tag">Week 05</span>
-            </div>
+
+            <!-- 已解鎖關卡 5 (雲端心電感應) -->
+            <a href="w5/index.html" class="level-btn unlocked">
+                <span class="week-tag">WEEK 05</span>
+                <span class="title">雲端心電感應</span>
+            </a>
+
+            <!-- 未解鎖關卡 (6 ~ 16) -->
             <div class="level-btn locked">
                 <span class="lock-icon">🔒</span>
                 <span class="week-tag">Week 06</span>
